@@ -1,9 +1,19 @@
 # omakase cookbook
 
-A Chef cookbook for deploying a service-oriented Rails application.
-Omakase assumes that your Rails app is comprised of services, you use
-Upstart as your init engine, you're serving static files with Nginx, and
-you're running some flavor of Linux.
+A cookbook for deploying service-oriented applications with Ruby on
+Rails. Omakase assumes very little about what tools you use(d) to build
+your application, but is opinionated about the structure of your
+environment in order to maintain clean and elegant deployments. It also
+assumes that you're using a relational database of some kind, as it's
+configured by default to run migrations. Omakase makes use of several
+existing cookbooks like [chruby][ch] and [nginx][ng] for dependencies as
+well as the [database][db] cookbook and [deploy][dp] resource to make
+transitioning from your existing 200-line `deploy` call into using the
+cookbook much easier.
+
+Omakase takes much of its cues from the [12-factor app][12f] deployment
+and maintenence techniques. It is the project's goal to make deploying
+Rails apps safer, easier, and faster using Chef.
 
 ## Supported Platforms
 
@@ -28,13 +38,9 @@ $ berks install
 Wrap this cookbook with your own app cookbook and use the following
 LWRP to deploy the app:
 
-### omakase_application
-
-Use this resource in your recipe to deploy a Rails app.
-
 ```ruby
 omakase_application '/srv/waxpoetic' do
-  repo "https://#{data_bag_item(:credentials, :github_token)}@github.com/waxpoetic/waxpoeticrecords.com.git"
+  repo node['myapp']['repo']
   revision node['myapp']['version']
   keep_releases 2
   rollback_on_error false
@@ -45,8 +51,44 @@ omakase_application '/srv/waxpoetic' do
 end
 ```
 
+This LWRP will install the following dependencies:
+
+- nginx
+- ruby-install
+- chruby
+- the bundler gem
+- whatever Ruby version you configured
+
+After doing this, it will configure your database. It will conditionally
+load an LWRP based on the `database_adapter` attribute, and apply
+default database connection parameters in order to add the app's
+database user and grant it DB creation abilities. This will allow the
+`deploy` resource to perform database commands.
+
+Once the database is configured, it's time to run the `deploy` resource
+for your application. This resource is configured to also run `bundle
+install`, set up the database, and precompile assets. It can also
+optionally be configured to clear any caches using `rake cache:clear`.
+
+What it will **not** do is set up your database server. Any databases
+such as PostgreSQL or Redis must be running _before_ this LWRP is invoked.
+We use the [database][db] cookbook to run commands on the DBMS, so be
+sure your `database_adapter` setting is supported within that cookbook.
+
+## Development
+
+Please include tests and submit all contributions in a pull request.
+Tests must pass within a `kitchen test` (isolated convergence of every
+suite) in order to be considered for acceptance into 'master'.
+
 ## License and Authors
 
 *Author:* Tom Scott (<tubbo@psychedeli.ca>)
 
 *License:* MIT
+
+[db]: https://supermarket.chef.io/cookbooks/database
+[ch]: https://supermarket.chef.io/cookbooks/chruby
+[ng]: https://supermarket.chef.io/cookbooks/nginx
+[dp]: https://docs.getchef.com/resource_deploy.html
+[12f]: http://12factor.net/
