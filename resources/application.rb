@@ -25,6 +25,7 @@
 # THE SOFTWARE.
 
 actions :deploy
+default_action :deploy
 
 CFG_PATH = '/etc/profile.d/rails.sh'
 
