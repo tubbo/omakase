@@ -36,5 +36,6 @@ omakase_application node['omakase']['dir'] do
   database_connection password: node['omakase']['master_database_password']
   database_user node['omakase']['user']
   rails_env node['omakase']['environment']
+  ruby_version node['omakase']['ruby_version']
   services node['omakase']['services']
 end

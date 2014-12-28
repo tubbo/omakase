@@ -44,15 +44,19 @@ LWRP to deploy the app:
 ```ruby
 omakase_application '/srv/my_app' do
   user 'app'
+
   repo 'git@github.com:me/myapp.git'
   revision node['app']['version']
   keep_releases 1
   rollback_on_error false
+
+  rails_env node['app']['environment']
+  ruby_version node['app']['ruby']
+  services %w(puma sidekiq)
+
   database_adapter :postgresql
   database_connection password: node['app']['master_password']
   database_user 'app'
-  rails_env node['app']['environment']
-  services %w(puma sidekiq)
 end
 ```
 
@@ -86,11 +90,50 @@ Please include tests and submit all contributions in a pull request.
 Tests must pass within a `kitchen test` (isolated convergence of every
 suite) in order to be considered for acceptance into 'master'.
 
+### Roadmap
+
+Eventually, it would be cool if the resource looked like this:
+
+```ruby
+omakase_application '/srv/my_app' do
+  code do
+    repository 'git@github.com:me/myapp.git'
+    reference 'master'
+    releases 1
+    rollback_on_error true
+  end
+
+  rails do
+    user 'app'
+    environment 'development'
+    ruby_version 'ruby-2.1.5'
+    services %w(puma sidekiq)
+  end
+
+  database do
+    adapter :postgresql
+    user 'app'
+    master_password 'master-password'
+  end
+end
+```
+
+And, for quick defaults:
+
+```ruby
+omakase_application '/srv/my_app' do
+  code      'git@github.com:me/myapp.git'
+  rails     'development'
+  database  :postgresql
+end
+```
+
+
 ## License and Authors
 
-*Author:* Tom Scott (<tubbo@psychedeli.ca>)
+**Author:** Tom Scott (<tubbo@psychedeli.ca>)
 
-*License:* MIT
+**License:** MIT
 
 [db]: https://supermarket.chef.io/cookbooks/database
 [ch]: https://supermarket.chef.io/cookbooks/chruby
