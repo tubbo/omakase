@@ -42,14 +42,16 @@ Wrap this cookbook with your own app cookbook and use the following
 LWRP to deploy the app:
 
 ```ruby
-omakase_application '/srv/waxpoetic' do
-  repo node['myapp']['repo']
-  revision node['myapp']['version']
-  keep_releases 2
+omakase_application '/srv/my_app' do
+  user 'app'
+  repo 'git@github.com:me/myapp.git'
+  revision node['app']['version']
+  keep_releases 1
   rollback_on_error false
   database_adapter :postgresql
-  database_connection :password => 'master-password'
-  database_user 'waxpoetic'
+  database_connection password: node['app']['master_password']
+  database_user 'app'
+  rails_env node['app']['environment']
   services %w(puma sidekiq)
 end
 ```
