@@ -4,7 +4,7 @@ maintainer_email 'tubbo@psychedeli.ca'
 license          'MIT'
 description      'Deploys a services-oriented Rails app'
 long_description 'Deploys a Rails app that uses services as its backend.'
-version          '0.0.1'
+version          '0.0.2'
 
 depends 'nginx'
 depends 'ruby-install'
