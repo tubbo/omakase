@@ -13,6 +13,11 @@ action :deploy do
     action :install
   end
 
+  gem_package 'bundler' do
+    gem_binary "/opt/rubies/#{new_resource.ruby_version}/bin/gem"
+    action :install
+  end
+
   new_resource.services.each do |service_name|
     template "/etc/init/#{service_name}.conf" do
       source 'service.conf.erb'
@@ -31,6 +36,21 @@ action :deploy do
       provider Chef::Provider::Service::Upstart
       action :nothing
     end
+  end
+
+  directory new_resource.directory do
+    owner new_resource.user
+    group new_resource.user
+    mode '0755'
+  end
+
+  merged_credentials = new_resource.credentials.merge(
+    'rails_env' => new_resource.rails_env
+  )
+
+  template new_resource.credentials_file_path do
+    source 'env.sh.erb'
+    variables credentials: merged_credentials
   end
 
   adapter = new_resource.database_adapter
@@ -131,7 +151,8 @@ action :deploy do
       directory: new_resource.directory,
       environment: new_resource.rails_env,
       domain: new_resource.fqdn,
-      protect_access: false
+      protect_access: false,
+      secure: false
   end
 
   nginx_site 'default' do

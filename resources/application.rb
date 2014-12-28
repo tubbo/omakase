@@ -15,3 +15,6 @@ attribute :bundler_args, [String], default: [
   '--jobs=4',
   '--without development test'
 ].join("\s")
+
+attribute :credentials, [Hash], default: {}
+attribute :credentials_file_path, [String], default: '/etc/profile.d/rails.sh'

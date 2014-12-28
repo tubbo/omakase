@@ -1,0 +1,11 @@
+description "waxpoetic: <%= @name %>"
+version "<%= @version %>"
+
+respawn
+
+normal exit 0 TERM
+
+script
+  cd <%= @directory %>/current
+  chruby-exec <%= @ruby %> -- ./bin/bundle exec <%= @name %> | logger -t <%= @name %>
+end script
