@@ -3,6 +3,7 @@ actions :deploy
 CFG_PATH = '/etc/profile.d/rails.sh'
 
 attribute :directory,          kind_of: [String], name_attribute: true
+attribute :user,               kind_of: [String], default: 'app'
 attribute :repo,               kind_of: [String]
 attribute :revision,           kind_of: [String]
 attribute :keep_releases,      kind_of: [Fixnum]
