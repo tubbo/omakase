@@ -1,3 +1,7 @@
-# 0.1.0
+# 0.0.2
 
-Initial release of omakase
+Minor bug fixes, MIT license and push to Supermarket
+
+# 0.0.1
+
+Initial testing release
