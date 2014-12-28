@@ -13,7 +13,10 @@ cookbook much easier.
 
 Omakase takes much of its cues from the [12-factor app][12f] deployment
 and maintenence techniques. It is the project's goal to make deploying
-Rails apps safer, easier, and faster using Chef.
+Rails apps safer, easier, and faster using Chef. Much of Omakase's
+initial code was extracted from [Wax Poetic][wp]'s application cookbook,
+which is now wrapping Omakase instead of providing a separate
+implementation.
 
 ## Supported Platforms
 
@@ -92,3 +95,4 @@ suite) in order to be considered for acceptance into 'master'.
 [ng]: https://supermarket.chef.io/cookbooks/nginx
 [dp]: https://docs.getchef.com/resource_deploy.html
 [12f]: http://12factor.net/
+[wp]: https://github.com/waxpoetic
