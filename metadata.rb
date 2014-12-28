@@ -1,0 +1,13 @@
+name             'omakase'
+maintainer       'Tom Scott'
+maintainer_email 'tubbo@psychedeli.ca'
+license          'All rights reserved'
+description      'Deploys a services-oriented Rails app'
+long_description 'Deploys a Rails app that uses services as its backend.'
+version          '0.0.1'
+
+depends 'nginx'
+depends 'ruby-install'
+depends 'chruby'
+depends 'database'
+depends 'nodejs'
