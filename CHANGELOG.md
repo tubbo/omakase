@@ -1,7 +1,7 @@
 # 0.0.2
 
-Minor bug fixes, MIT license and push to Supermarket
+Minor bug fixes.
 
 # 0.0.1
 
-Initial testing release
+Initial testing release to Supermarket.
