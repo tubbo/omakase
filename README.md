@@ -118,17 +118,6 @@ omakase_application '/srv/my_app' do
 end
 ```
 
-And, for quick defaults:
-
-```ruby
-omakase_application '/srv/my_app' do
-  code      'git@github.com:me/myapp.git'
-  rails     'development'
-  database  :postgresql
-end
-```
-
-
 ## License and Authors
 
 **Author:** Tom Scott (<tubbo@psychedeli.ca>)
